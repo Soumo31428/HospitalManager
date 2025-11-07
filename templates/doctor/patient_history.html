@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Patient History{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-file-medical"></i> Patient Medical History</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>{{ patient.full_name }}</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <p class="mb-1"><strong>Gender:</strong> {{ patient.gender }}</p>
+                <p class="mb-1"><strong>Blood Group:</strong> {{ patient.blood_group }}</p>
+            </div>
+            <div class="col-md-4">
+                <p class="mb-1"><strong>Phone:</strong> {{ patient.phone }}</p>
+                <p class="mb-1"><strong>Email:</strong> {{ patient.user.email }}</p>
+            </div>
+            <div class="col-md-4">
+                <p class="mb-1"><strong>Emergency Contact:</strong> {{ patient.emergency_contact }}</p>
+            </div>
+        </div>
+        {% if patient.medical_history %}
+        <hr>
+        <p class="mb-0"><strong>Medical History:</strong> {{ patient.medical_history }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Previous Visits & Treatments</h5>
+    </div>
+    <div class="card-body">
+        {% for appointment in appointments %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6>{{ appointment.appointment_date }} - {{ appointment.appointment_time }}</h6>
+                <p class="mb-1"><strong>Symptoms:</strong> {{ appointment.symptoms }}</p>
+                {% if appointment.treatment %}
+                <hr>
+                <p class="mb-1"><strong>Diagnosis:</strong> {{ appointment.treatment.diagnosis }}</p>
+                {% if appointment.treatment.prescription %}
+                <p class="mb-1"><strong>Prescription:</strong> {{ appointment.treatment.prescription }}</p>
+                {% endif %}
+                {% if appointment.treatment.notes %}
+                <p class="mb-0"><strong>Notes:</strong> {{ appointment.treatment.notes }}</p>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">No previous visits</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

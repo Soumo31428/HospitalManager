@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Find Doctors{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-search"></i> Find Doctors</h2>
+
+<div class="card search-box">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="search" 
+                       placeholder="Search by name or specialization..." value="{{ search_query }}">
+            </div>
+            <div class="col-md-5">
+                <select class="form-select" name="department">
+                    <option value="">All Departments</option>
+                    {% for dept in departments %}
+                    <option value="{{ dept.id }}" {% if selected_department == dept.id|string %}selected{% endif %}>
+                        {{ dept.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    {% for doctor in doctors %}
+    <div class="col-md-6 mb-4">
+        <div class="card doctor-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ doctor.full_name }}</h5>
+                <p class="text-primary mb-2"><strong>{{ doctor.department.name }}</strong></p>
+                <p class="mb-1"><i class="bi bi-mortarboard"></i> {{ doctor.qualifications }}</p>
+                <p class="mb-1"><i class="bi bi-briefcase"></i> {{ doctor.experience_years }} years experience</p>
+                <p class="mb-1"><i class="bi bi-telephone"></i> {{ doctor.phone }}</p>
+                <p class="mb-1"><i class="bi bi-calendar"></i> {{ doctor.available_days }}</p>
+                <p class="mb-3"><i class="bi bi-cash"></i> Consultation Fee: ${{ doctor.consultation_fee }}</p>
+                <a href="{{ url_for('patient_book_appointment', doctor_id=doctor.id) }}" 
+                   class="btn btn-success">Book Appointment</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            No doctors found matching your criteria.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
